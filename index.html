@@ -104,7 +104,7 @@
             <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
                 <!-- Your Name (now a button, styles matched) -->
                 <button id="name-btn" class="text-lg font-medium">
-                    Jerónimo
+                    🪲 Jerónimo Gutiérrez Balanta
                 </button>
                 
                 <!-- Navigation Buttons -->
@@ -163,10 +163,24 @@
             <!-- "About" Page View -->
             <section id="about-page" class="content-section">
                 <div class="max-w-3xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-6">About Me</h2>
+                    <h2 class="text-3xl font-bold mb-6"> 🪲 </h2>
                     <div class="space-y-4 text-lg text-gray-700 dark:text-gray-300">
-                        <p>This is the about page. Replace this with your own biography, artist statement, or contact information.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            
+                        <p>I am a young visual artist that lives and works in Bremen, Germany. I've focused my work towards topics such as the relationships between body and city, family archives, disappearance  and illness, expressing these ideas through traditional techniques like painting, drawing and performance as well as digital and other medium techniques like animation, soundscape, and research-creation. The body in dispute, as a political and poetic issue, is the central axis of my work. Due to the nature of my bachelor degree, I also have a strong background in pedagogy, aesthetics and art history.</p>
+                        <p>As a graphic designer, I have specialized in illustration, visual thinking, and product design, working closely with various companies, universities, and regional institutions in interdisciplinary teams and projects. These projects encompass topics such as university continuing education, non-profit training programs with vulnerable communities, and government projects for women's equality and welfare.
+
+                            In my free time, as a personal note, I am an amateur musician. I studied three years of music in high school with an emphasis on piano, and I greatly enjoy trail running.
+                        <p> Education
+                        2024 - Now Digital Media Master, HfK Bremen, Germany
+                        2016-2022 Bachelor in Visual Arts, Universidad del Valle, Cali, Colombia
+                        2014-2016 Technical School Certificate, Electronics, SENA 
+                        ​2011-2013 Musical Juvenile Studies, “Plan Pentagrama”, Universidad del Valle
+                        <p>
+
+                        <p>​Contact me :)
+                        jeguba1999@gmail.com
+                        (+57) 3004085202 - (+49)1630819959
+                        Ig: @sabajero.<p>
                     </div>
                 </div>
             </section>
@@ -206,27 +220,39 @@
         </footer>
     </div>
 
-    <!-- COMPLETE SCRIPT BLOCK -->
+    <!-- DATA DATA DATA -->
     <script>
-        // --- DATA ---
-        // This is where you'll edit your project information
-        
-        // --- UPDATED: Added your new projects to the array ---
         const portfolioData = [
             // Your existing projects
-            { id: 1, title: "Windcatchers", year: 2025, type: "Research", description: "A project about machines, displays and wind.", thumbnail: "/Users/jeronimogutierrez/JERO Portfolio/Website/Garden-Portfolio/images/windcatchers/windcatchers_1.jpg", tags: ["Research", "Instalation", "Electronics"] },
-            { id: 2, title: "Corp Bully", year: 2025, type: "Video Game", description: "Part of my outsourcing research.", thumbnail: "https://placehold.co/600x400/8E24AA/FFFFFF?text=Corp+Bully", tags: ["Personal", "Design"] },
-            { id: 3, title: "How to shit on your company", year: 2024, type: "User Manual", description: "Client photoshoot.", thumbnail: "https://placehold.co/600x400/FDD835/000000?text=User+Manual", tags: ["Work", "Design"] },
-            
-            // FIXED: Corrected the syntax for project id: 4
+            { id: 1, title: "Windcatchers", year: 2025, type: "Research", description: "A project about machines, displays and wind.", thumbnail: "images/thumbnails/windcatcher.png", tags: ["Research", "Electronics"] },
+            { id: 2, title: "Corp Bully", year: 2025, type: "Video Game", description: "Part of my outsourcing research.", thumbnail: "images/thumbnails/bully.png", tags: ["Personal", "Design"] },
+            { id: 3, title: "How to shit on your company", year: 2024, type: "User Manual", description: "Client photoshoot.", thumbnail: "images/thumbnails/shit.jpg", tags: ["Design"] },
+            { 
+                id: 4.2, 
+                title: "Synthetic Chordata", 
+                year: 2025, 
+                type: "Zine", 
+                description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
+                thumbnail: "images/thumbnails/chordata.jpg", // <-- ADDED 'thumbnail' KEY
+                tags: ["Publication", "Comic"] // <-- ADDED 'tags' KEY
+            },
             { 
                 id: 4, 
                 title: "Aura Coffee Company", 
                 year: 2025, 
                 type: "Sound Essay", // <-- ADDED 'type' KEY
                 description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
-                thumbnail: "https://placehold.co/600x400/A1887F/FFFFFF?text=Aura+Coffee", // <-- ADDED 'thumbnail' KEY
+                thumbnail: "images/thumbnails/aura.jpg", // <-- ADDED 'thumbnail' KEY
                 tags: ["Sound", "Essay", "Artistic Research"] // <-- ADDED 'tags' KEY
+            },
+            { 
+                id: 4.5, 
+                title: "Internship: GICAEA", 
+                year: 2021, 
+                type: "Education", // <-- ADDED 'type' KEY
+                description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
+                thumbnail: "images/thumbnails/gicaea.jpg", // <-- ADDED 'thumbnail' KEY
+                tags: ["Education", "Printmaking", "Artistic Research"] // <-- ADDED 'tags' KEY
             },
 
             // --- Your 8 new projects start here ---
@@ -236,17 +262,26 @@
                 year: 2022,
                 type: "Research-Creation",
                 description: "This Meritorious Degree Work, conducted at Universidad del Valle, comprises a monograph and artistic creation grounded in research-creation methodology, aimed at reflecting on the changes brought by the Covid-19 pandemic to daily life in Cali and Buga through a virtual art book.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Pandémica",
-                tags: [] // Left empty as requested
+                thumbnail: "images/thumbnails/pandemica.jpeg",
+                tags: ["Research","Drawing"] // Left empty as requested
             },
             {
                 id: 6,
                 title: "Que no le pase comadre!",
                 year: 2022,
-                type: "Illustration",
+                type: "Comic",
                 description: "Design, conceptualization and illustration for this short comic that emerged from the research project \"Characterization of the health status of Women in Buenaventura and Guapi,\" supported by the Ministry of Science and Technology and executed by the \"Observatorio para la Equidad de las Mujeres (OEM)\" between 2021 and 2022.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Que+no+le+pase",
-                tags: [] // Left empty as requested
+                thumbnail: "images/thumbnails/comadre.png",
+                tags: ["Comic","Work"] // Left empty as requested
+            },
+            {
+                id: 6.1,
+                title: "Ahora sin cielo abierto",
+                year: 2021,
+                type: "Painting",
+                description: "Now without an open sky is a project that seeks to illustrate the feelings, thoughts and experiences of 10 young university students in the confinement caused by the Covid 19 pandemic in Cali. Each illustration was made from the dialogue with the participants and what they considered significant to be illustrated. The result of this exercise are ten watercolors that speak of the city and the experience of confinement from an intimate point of view.",
+                thumbnail: "images/thumbnails/cielo.jpg",
+                tags: ["Thesis","Painting","Artistic Research"] // Left empty as requested
             },
             {
                 id: 7,
@@ -254,7 +289,7 @@
                 year: 2022,
                 type: "Muralism",
                 description: "\"Permanent Night Owls\" project originated as a response to the Covid-19 lockdown, initially conceived as a home muralism proposal.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Noctambulas",
+                thumbnail: "images/thumbnails/bichos.jpeg",
                 tags: [] // Left empty as requested
             },
             {
@@ -263,7 +298,7 @@
                 year: 2020, // Used 2020 from "2019 - 2020"
                 type: "Artistic/Educational Project",
                 description: "Aleteo Shakuhachi Project was an artistic / educational project conceived along two friends of mine, our objective was to teach, build and explore the possibilities of the Japanese flute \"Shakuhachi\" outside the musical or meditation context.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Aleteo+Shakuhachi",
+                thumbnail: "images/thumbnails/shaku.jpg",
                 tags: [] // Left empty as requested
             },
             {
@@ -272,8 +307,8 @@
                 year: 2019,
                 type: "Performance",
                 description: "Performance action took place during the 2019 Manizales International Contemporary Art Festival (FIAC), organized by the University of Caldas. It involved walking very slowly for an hour along one of the city's busiest streets while playing the Japanese Shakuhachi flute. This action challenged the city's dynamics and conventional notions of street usage.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Interlude",
-                tags: [] // Left empty as requested
+                thumbnail: "images/thumbnails/interlude.jpg",
+                tags: ["Performance",] // Left empty as requested
             },
             {
                 id: 10,
@@ -281,8 +316,8 @@
                 year: 2019,
                 type: "Imagery",
                 description: "\"The Strongest Bull\" is a project that from my personal experience of familial disappearance to explore collective narratives of disappearance phenomena in Colombia in the 80's, utilizing imagery as a tool for spectator reflection.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=El+toro+mas+fuerte",
-                tags: [] // Left empty as requested
+                thumbnail: "images/thumbnails/toro.jpeg",
+                tags: ["Animation"] // Left empty as requested
             },
             {
                 id: 11,
@@ -290,7 +325,7 @@
                 year: 2019,
                 type: "Illustration",
                 description: "Open call to artists to participate collectively in the creation of illustrations for the book \"Escondidijo\", I was involded as one of the many artist that illustrated for this book.",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Letras+Ilustradas",
+                thumbnail: "",
                 tags: [] // Left empty as requested
             },
             {
@@ -299,7 +334,7 @@
                 year: 2017,
                 type: "Sound Recording",
                 description: "\"False Landscape\" was a project undertaken in 2017, based on recordings captured in Cali, Colombia",
-                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Paisaje+en+Falso",
+                thumbnail: "",
                 tags: [] // Left empty as requested
             }
         ];
