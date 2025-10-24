@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!-- Add dark class here dynamically -->
+<!-- FIXED: Removed h-full, added dark:bg-black -->
+<html lang="en" class="bg-white dark:bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 🪲 Jerónimo Gutiérrez Balanta </title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- NEW: Load p5.js for the Garden -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <!-- Add Tailwind dark mode config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable 'class' strategy for dark mode
+            theme: {
+                extend: {
+                    // You can add custom theme settings here if needed
+                    colors: {
+                        'spring-green': '#00FF7F',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Simple fade-in transition */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dark mode toggle switch styles */
+        .toggle-switch {
+            width: 40px;
+            height: 22px;
+            position: relative;
+            display: inline-block;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 22px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #00FF7F; /* Spring Green */
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(18px);
+        }
+
+        /* NEW: Styles for the p5.js canvas */
+        #garden-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 75vh; /* 75% of the viewport height */
+            cursor: crosshair;
+        }
+        #garden-canvas-container canvas {
+            display: block;
+            /* REMOVED: border: 1px solid #e5e7eb; */
+        }
+        /* REMOVED: dark mode border rule */
+        html.dark #garden-canvas-container canvas {
+            /* REMOVED: border-color: #374151; */
+        }
+
+    </style>
+</head>
+<!-- FIXED: Removed h-full -->
+<body class="font-sans antialiased text-gray-900 bg-white dark:bg-black dark:text-gray-200">
+    
+    <!-- Main Site Wrapper -->
+    <div id="main-wrapper" class="flex flex-col min-h-screen">
+        <!-- Header / Navigation -->
+        <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-10 dark:bg-black/95">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <!-- Your Name (now a button, styles matched) -->
+                <button id="name-btn" class="text-lg font-medium">
+                    Jerónimo
+                </button>
+                
+                <!-- Navigation Buttons -->
+                <div class="flex items-center space-x-6">
+                    <!-- Standard Nav -->
+                    <!-- UPDATED: Added pill styling classes -->
+                    <div class="hidden sm:flex items-center space-x-2">
+                        <!-- RENAMED: Home to Garden -->
+                        <button id="garden-btn" class="text-lg font-medium px-4 py-1.5 rounded-full">Garden</button>
+                        <button id="works-btn" class="text-lg font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">Works</button>
+                        <button id="about-btn" class="text-lg font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">About</button>
+                    </div>
+
+                    <!-- View Toggle Button -->
+                    <button id="toggle-view-btn" class="px-4 py-1.5 text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        Boring
+                    </button>
+
+                    <!-- REMOVED: Language Selector -->
+
+                    <!-- Dark Mode Toggle -->
+                    <label for="dark-mode-toggle" class="toggle-switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+            <!-- RENAMED: "Home" to "Garden" Page View (Blank) -->
+            <section id="garden-page" class="content-section active">
+                <!-- This is intentionally blank for your future GIF -->
+                <!-- UPDATED: This div will hold the p5.js canvas -->
+                <div id="garden-canvas-container">
+                    <!-- p5.js will create and insert a <canvas> element here -->
+                </div>
+            </section>
+
+            <!-- "Normal" Portfolio View -->
+            <section id="normal-portfolio" class="content-section"> <!-- "active" class removed -->
+                
+                <!-- NEW: Tag Filter Container -->
+                <div id="tag-filter-container" class="flex flex-wrap gap-2 mb-8">
+                    <!-- JS will populate this with tag buttons -->
+                </div>
+
+                <div id="normal-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- JS will populate this -->
+                </div>
+            </section>
+
+            <!-- "About" Page View -->
+            <section id="about-page" class="content-section">
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-6">About Me</h2>
+                    <div class="space-y-4 text-lg text-gray-700 dark:text-gray-300">
+                        <p>This is the about page. Replace this with your own biography, artist statement, or contact information.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- "Simplified" Portfolio View -->
+            <section id="simple-portfolio" class="content-section">
+                
+                <!-- NEW: Tag Filter Container for Simple View -->
+                <div id="simple-tag-filter-container" class="flex flex-wrap gap-2 mb-8">
+                    <!-- JS will populate this with tag buttons -->
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Left Column: Project List -->
+                    <div class="w-full md:w-1/3 lg:w-1.5/4">
+                        <ul id="simple-project-list" class="space-y-3">
+                            <!-- JS will populate this -->
+                        </ul>
+                    </div>
+                    <!-- Right Column: Project Details -->
+                    <div id="simple-project-image-container" class="w-full md:w-2/3 lg:w-3/4 sticky top-24 self-start">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <!-- FIXED: Added bg-white dark:bg-black to ensure footer has a background in both modes -->
+        <footer class="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 mt-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                &copy; <span id="current-year"></span> Jerónimo. © Jerónimo Gutiérrez Balanta. All rights reserved. Unauthorized use of content is prohibited. If you want to use, share something or have questions just send me an email :) 
+            </div>
+        </footer>
+    </div>
+
+    <!-- COMPLETE SCRIPT BLOCK -->
+    <script>
+        // --- DATA ---
+        // This is where you'll edit your project information
+        
+        // --- DELETED: Helper function to generate random tags ---
+        // const allTags = [...] - This is no longer needed.
+        // function getRandomTags() { ... } - This is no longer needed.
+
+        // --- NEW: 20 Simulated Projects ---
+        const portfolioData = [
+            { id: 1, title: "Windcatchers", year: 2025, type: "Research", description: "A project about machines, displays and wind.", thumbnail: "/Users/jeronimogutierrez/JERO Portfolio/Website/Garden-Portfolio/images/windcatchers/windcatchers_1.jpg", tags: ["Research", "Instalation", "Electronics"] },
+            { id: 2, title: "Corp Bully", year: 2025, type: "Video Game", description: "Part of my outsourcing research.", thumbnail: "https://placehold.co/600x400/8E24AA/FFFFFF?text=Lavandula", tags: ["Personal", "Design"] },
+            { id: 3, title: "How to shit on your company", year: 2024, type: "User Manual", description: "Client photoshoot.", thumbnail: "https://placehold.co/600x400/FDD835/000000?text=Helianthus", tags: ["Work", "Design"] },
+            { id: 4, title: "Aura Coffee Company", year: 2025, description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", thumbnail: "", tags: ["Sound", "Essay", "Artistic Research"]},
+            {
+                id: 5,
+                title: "Pandémica",
+                year: 2022,
+                type: "Research-Creation",
+                description: "This Meritorious Degree Work, conducted at Universidad del Valle, comprises a monograph and artistic creation grounded in research-creation methodology, aimed at reflecting on the changes brought by the Covid-19 pandemic to daily life in Cali and Buga through a virtual art book.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Pandémica",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 6,
+                title: "Que no le pase comadre!",
+                year: 2022,
+                type: "Illustration",
+                description: "Design, conceptualization and illustration for this short comic that emerged from the research project \"Characterization of the health status of Women in Buenaventura and Guapi,\" supported by the Ministry of Science and Technology and executed by the \"Observatorio para la Equidad de las Mujeres (OEM)\" between 2021 and 2022.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Que+no+le+pase",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 7,
+                title: "Noctambulas Permanentes",
+                year: 2022,
+                type: "Muralism",
+                description: "\"Permanent Night Owls\" project originated as a response to the Covid-19 lockdown, initially conceived as a home muralism proposal.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Noctambulas",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 8,
+                title: "Aleteo Shakuhachi",
+                year: 2020, // Used 2020 from "2019 - 2020"
+                type: "Artistic/Educational Project",
+                description: "Aleteo Shakuhachi Project was an artistic / educational project conceived along two friends of mine, our objective was to teach, build and explore the possibilities of the Japanese flute \"Shakuhachi\" outside the musical or meditation context.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Aleteo+Shakuhachi",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 9,
+                title: "Interlude to practice the useless",
+                year: 2019,
+                type: "Performance",
+                description: "Performance action took place during the 2019 Manizales International Contemporary Art Festival (FIAC), organized by the University of Caldas. It involved walking very slowly for an hour along one of the city's busiest streets while playing the Japanese Shakuhachi flute. This action challenged the city's dynamics and conventional notions of street usage.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Interlude",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 10,
+                title: "El toro más fuerte",
+                year: 2019,
+                type: "Imagery",
+                description: "\"The Strongest Bull\" is a project that from my personal experience of familial disappearance to explore collective narratives of disappearance phenomena in Colombia in the 80's, utilizing imagery as a tool for spectator reflection.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=El+toro+mas+fuerte",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 11,
+                title: "Letras Ilustradas: Bello 2019",
+                year: 2019,
+                type: "Illustration",
+                description: "Open call to artists to participate collectively in the creation of illustrations for the book \"Escondidijo\", I was involded as one of the many artist that illustrated for this book.",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Letras+Ilustradas",
+                tags: [] // Left empty as requested
+            },
+            {
+                id: 12,
+                title: "Paisaje en Falso",
+                year: 2017,
+                type: "Sound Recording",
+                description: "\"False Landscape\" was a project undertaken in 2017, based on recordings captured in Cali, Colombia",
+                thumbnail: "https://placehold.co/600x400/cccccc/000000?text=Paisaje+en+Falso",
+                tags: [] // Left empty as requested
+            }
+        ];
+
+        // --- REMOVED: TRANSLATIONS ---
+
+        // --- APPLICATION STATE ---
+        const state = {
+            isSimple: false, // "Boring" view is off by default
+            currentView: 'garden-page', // 'garden-page', 'normal-portfolio' or 'about-page'
+            selectedSimpleProject: portfolioData.length > 0 ? portfolioData[0].id : null, // Default to showing the first project in simple view
+            // REMOVED: currentLanguage
+            currentTag: 'all' // NEW: For tag filtering
+        };
+
+        // NEW: p5.js Sketch instance holder
+        let gardenSketch = null;
+
+        // --- DOM ELEMENTS ---
+        const mainContent = document.getElementById('main-content');
+        const sections = mainContent.querySelectorAll('.content-section');
+        const nameBtn = document.getElementById('name-btn'); // ADDED
+        const gardenBtn = document.getElementById('garden-btn'); // RENAMED
+        const worksBtn = document.getElementById('works-btn');
+        const aboutBtn = document.getElementById('about-btn');
+        const toggleBtn = document.getElementById('toggle-view-btn');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+        // REMOVED: Language Elements
+
+        // Simple Portfolio Elements
+        const simpleProjectList = document.getElementById('simple-project-list');
+        const simpleProjectImageContainer = document.getElementById('simple-project-image-container');
+        const simpleTagFilterContainer = document.getElementById('simple-tag-filter-container'); // NEW
+
+        // Normal Portfolio Elements
+        const normalGrid = document.getElementById('normal-grid');
+        const tagFilterContainer = document.getElementById('tag-filter-container'); // NEW
+
+        // --- RENDER FUNCTIONS ---
+        
+        /**
+         * Main render function to update the view based on the current state
+         */
+        function render() {
+            // UPDATED: Hardcoded button text
+            toggleBtn.textContent = state.isSimple ? 'Fun' : 'Boring';
+            
+            // Toggle active state for page navigation buttons
+            // UPDATED: New logic for pill-style buttons
+            const isGardenActive = !state.isSimple && state.currentView === 'garden-page';
+            gardenBtn.classList.toggle('bg-spring-green', isGardenActive);
+            gardenBtn.classList.toggle('text-black', isGardenActive);
+            gardenBtn.classList.toggle('text-gray-700', !isGardenActive);
+            gardenBtn.classList.toggle('dark:text-gray-400', !isGardenActive);
+            gardenBtn.classList.toggle('hover:bg-gray-100', !isGardenActive);
+            gardenBtn.classList.toggle('dark:hover:bg-gray-800', !isGardenActive);
+
+            const isWorksActive = !state.isSimple && state.currentView === 'normal-portfolio';
+            worksBtn.classList.toggle('bg-spring-green', isWorksActive);
+            worksBtn.classList.toggle('text-black', isWorksActive);
+            worksBtn.classList.toggle('text-gray-700', !isWorksActive);
+            worksBtn.classList.toggle('dark:text-gray-400', !isWorksActive);
+            worksBtn.classList.toggle('hover:bg-gray-100', !isWorksActive);
+            worksBtn.classList.toggle('dark:hover:bg-gray-800', !isWorksActive);
+            
+            const isAboutActive = !state.isSimple && state.currentView === 'about-page';
+            aboutBtn.classList.toggle('bg-spring-green', isAboutActive);
+            aboutBtn.classList.toggle('text-black', isAboutActive);
+            aboutBtn.classList.toggle('text-gray-700', !isAboutActive);
+            aboutBtn.classList.toggle('dark:text-gray-400', !isAboutActive);
+            aboutBtn.classList.toggle('hover:bg-gray-100', !isAboutActive);
+            aboutBtn.classList.toggle('dark:hover:bg-gray-800', !isAboutActive);
+
+            // Show/Hide page sections
+            sections.forEach(section => {
+                if (state.isSimple) {
+                    // Simplified view is active
+                    section.classList.toggle('active', section.id === 'simple-portfolio');
+                } else {
+                    // Normal view is active
+                    section.classList.toggle('active', section.id === state.currentView);
+                }
+            });
+
+            // Populate content for the active view
+            if (state.isSimple) {
+                renderSimplePortfolio();
+            } else if (state.currentView === 'normal-portfolio') {
+                renderNormalPortfolio();
+            }
+            // "About" page is static HTML, so no render function needed
+            
+            // NEW: Control p5.js sketch loop
+            if (gardenSketch) {
+                if (!state.isSimple && state.currentView === 'garden-page') {
+                    gardenSketch.loop(); // Play animation
+                } else {
+                    gardenSketch.noLoop(); // Pause animation
+                }
+            }
+        }
+
+        /**
+         * NEW: Refactored function to render tag filters
+         * @param {HTMLElement} container - The container element to populate
+         * @param {boolean} isGrey - Whether to use the grey-text style
+         */
+        function renderTagFilters(container, isGrey = false) {
+            container.innerHTML = ''; // Clear tags
+            
+            const allTags = new Set();
+            portfolioData.forEach(p => p.tags.forEach(tag => allTags.add(tag)));
+            const sortedTags = [...allTags].sort();
+
+            // --- Button Styling ---
+            const activeClass = isGrey 
+                ? 'bg-gray-300 dark:bg-gray-600 text-black dark:text-white' 
+                : 'bg-spring-green text-black';
+            
+            const inactiveClass = isGrey
+                ? 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700';
+
+            // Create "All" button
+            const allBtn = document.createElement('button');
+            allBtn.textContent = 'All'; // UPDATED: Hardcoded text
+            allBtn.className = `px-3 py-1 text-sm font-medium rounded-full ${state.currentTag === 'all' ? activeClass : inactiveClass}`;
+            allBtn.onclick = () => {
+                state.currentTag = 'all';
+                render(); 
+            };
+            container.appendChild(allBtn);
+
+            // Create buttons for each tag
+            sortedTags.forEach(tag => {
+                const tagBtn = document.createElement('button');
+                tagBtn.textContent = tag;
+                tagBtn.className = `px-3 py-1 text-sm font-medium rounded-full ${state.currentTag === tag ? activeClass : inactiveClass}`;
+                tagBtn.onclick = () => {
+                    state.currentTag = tag;
+                    render(); 
+                };
+                container.appendChild(tagBtn);
+            });
+        }
+
+        /**
+         * Populates the "Normal" portfolio grid
+         */
+        function renderNormalPortfolio() {
+            // --- 1. RENDER TAGS ---
+            renderTagFilters(tagFilterContainer, false); // Use new function
+
+            // --- 2. RENDER FILTERED GRID ---
+            normalGrid.innerHTML = ''; // Clear existing grid
+            
+            // Sort by year, newest first
+            const sortedProjects = [...portfolioData].sort((a, b) => b.year - a.year);
+
+            // NEW: Filter projects based on the current tag
+            const filteredProjects = state.currentTag === 'all'
+                ? sortedProjects
+                : sortedProjects.filter(p => p.tags.includes(state.currentTag));
+
+            // Render the grid (using filteredProjects)
+            filteredProjects.forEach(project => {
+                const item = document.createElement('div');
+                item.className = 'space-y-2'; // Container for image + text block
+                // UPDATED: Removed tags from the innerHTML
+                item.innerHTML = `
+                    <img src="${project.thumbnail}" alt="${project.title}" class="w-full h-64 object-cover border border-gray-200 dark:border-gray-700 dark:opacity-80">
+                    <div>
+                        <h3 class="text-lg font-bold">${project.title}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${project.year} &ndash; ${project.type}</p>
+                    </div>
+                `;
+                normalGrid.appendChild(item);
+            });
+        }
+
+        /**
+         * Populates the "Simplified" portfolio view
+         */
+        function renderSimplePortfolio() {
+            // NEW: Render tags for simple view
+            renderTagFilters(simpleTagFilterContainer, true);
+
+            // 1. Populate project list
+            simpleProjectList.innerHTML = ''; // Clear list
+            
+            // Sort by year, newest first (chronological)
+            const sortedProjects = [...portfolioData].sort((a, b) => b.year - a.year);
+
+            // NEW: Filter projects based on the current tag
+            const filteredProjects = state.currentTag === 'all'
+                ? sortedProjects
+                : sortedProjects.filter(p => p.tags.includes(state.currentTag));
+            
+            // NEW: Check if there are any projects (using filteredProjects)
+            if (filteredProjects.length === 0) {
+                simpleProjectList.innerHTML = `<li class="text-gray-500">No projects to display.</li>`;
+                simpleProjectImageContainer.innerHTML = ''; // Clear image
+                return;
+            }
+
+            // Use filteredProjects to build the list
+            filteredProjects.forEach(project => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.className = `w-full text-left ${project.id === state.selectedSimpleProject ? 'font-bold text-spring-green' : 'hover:text-gray-500 dark:hover:text-gray-400'}`;
+                button.innerHTML = `
+                    <span class="block">${project.title}</span>
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">${project.year} - ${project.type}</span>
+                `;
+                // UPDATED: Changed from 'onclick' to 'onmouseenter'
+                button.onmouseenter = () => {
+                    state.selectedSimpleProject = project.id;
+                    render(); // Re-render to show selection
+                };
+                li.appendChild(button);
+                simpleProjectList.appendChild(li);
+            });
+
+            // 2. Populate selected project details
+            // NEW: Check if selected project is in the filtered list
+            let selectedProject = filteredProjects.find(p => p.id === state.selectedSimpleProject);
+
+            // If not found (or invalid), default to the first item in the filtered list
+            if (!selectedProject && filteredProjects.length > 0) {
+                state.selectedSimpleProject = filteredProjects[0].id;
+                selectedProject = filteredProjects[0];
+            }
+            
+            if (selectedProject) {
+                
+                // 3. Populate project image
+                simpleProjectImageContainer.innerHTML = ''; // Clear image
+                const img = document.createElement('img');
+                // Use the project's thumbnail as the single image
+                img.src = selectedProject.thumbnail; 
+                img.alt = `${selectedProject.title} image`;
+                // Use max-h to prevent image from being excessively tall
+                img.className = 'w-full max-h-[75vh] object-cover border border-gray-200 dark:border-gray-700 dark:opacity-80'; 
+                simpleProjectImageContainer.appendChild(img);
+            } else {
+                // Handle case where list is filtered and no project is selected
+                simpleProjectImageContainer.innerHTML = '';
+            }
+        }
+
+        // --- REMOVED: TRANSLATION FUNCTION ---
+
+        // --- EVENT LISTENERS ---
+        nameBtn.addEventListener('click', () => { // ADDED
+            state.isSimple = false;
+            state.currentView = 'garden-page';
+            state.currentTag = 'all'; // Reset tag on page change
+            render();
+        });
+
+        gardenBtn.addEventListener('click', () => { // RENAMED
+            state.isSimple = false;
+            state.currentView = 'garden-page';
+            state.currentTag = 'all'; // Reset tag on page change
+            render();
+        });
+
+        worksBtn.addEventListener('click', () => {
+            state.isSimple = false;
+            state.currentView = 'normal-portfolio';
+            state.currentTag = 'all'; // Reset tag on page change
+            render();
+        });
+
+        aboutBtn.addEventListener('click', () => {
+            state.isSimple = false;
+            state.currentView = 'about-page';
+            state.currentTag = 'all'; // Reset tag on page change
+            render();
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            state.isSimple = !state.isSimple;
+            state.currentTag = 'all'; // Reset tag on view change
+            // If we're toggling back to "normal", default to the 'garden' view
+            if (!state.isSimple) {
+                state.currentView = 'garden-page';
+            }
+            render();
+        });
+
+        // --- REMOVED: LANGUAGE SELECTOR ---
+
+        // --- DARK MODE ---
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme in localStorage
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            darkModeToggle.checked = true;
+        } else {
+            htmlElement.classList.remove('dark');
+            darkModeToggle.checked = false;
+        }
+
+        // Listen for toggle change
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                htmlElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            }
+        });
+
+        // --- FOOTER YEAR ---
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // --- INITIAL RENDER ---
+        // Run the render function on page load
+        render();
+        // REMOVED: translatePage();
+
+
+        // --- NEW: p5.js GARDEN SKETCH ---
+        
+        // This class defines a "Plant" in our garden
+        class Plant {
+            constructor(p, project, x, y, h) {
+                this.p = p; // The p5.js instance
+                this.project = project;
+                this.baseX = x;
+                this.baseY = y;
+                this.height = h;
+                this.flowerSize = 20;
+                this.waveOffset = p.random(1000); // So each plant waves differently
+                this.isHovered = false;
+                // NEW: Add a unique bend to each stem
+                this.bendOffset = p.random(-40, 40);
+            }
+
+            // Check if the mouse is near the flower
+            checkHover() {
+                // Calculate the current (waving) X position of the flower
+                const wave = this.p.sin(this.p.frameCount * 0.02 + this.waveOffset) * 10;
+                const flowerX = this.baseX + wave;
+                const flowerY = this.baseY - this.height;
+
+                // Calculate distance from mouse to flower
+                const d = this.p.dist(this.p.mouseX, this.p.mouseY, flowerX, flowerY);
+                this.isHovered = (d < 80);
+            }
+
+            // Handle the click event
+            click() {
+                if (this.isHovered) {
+                    // This is the magic!
+                    // We call the functions from the main script
+                    state.isSimple = true; // Go to "Boring" view
+                    state.selectedSimpleProject = this.project.id; // Select this project
+                    render(); // Tell the main page to update
+                    return true;
+                }
+                return false;
+            }
+
+            // Draw the plant
+            display(isDark) {
+                const p = this.p;
+
+                // --- Colors ---
+                const stemColor = isDark ? 100 : 150; // Grey stem
+                const flowerColor = isDark ? [150, 150, 150] : [100, 100, 100]; // Dark/Light grey flower
+                const hoverColor = [0, 255, 127]; // Spring Green
+                const textColor = isDark ? 255 : 0;
+                const textBg = isDark ? 0 : 255;
+
+                // --- Waving Motion ---
+                const wave = p.sin(p.frameCount * 0.02 + this.waveOffset) * 35; // Simple wave
+                const flowerX = this.baseX + wave;
+                const flowerY = this.baseY - this.height;
+
+                // --- Draw Stem ---
+                p.noFill();
+                p.stroke(stemColor);
+                p.strokeWeight(2);
+                // UPDATED: Use a Bezier curve instead of a straight line
+                p.bezier(
+                    this.baseX, this.baseY,                      // Anchor 1 (base)
+                    this.baseX + this.bendOffset, this.baseY - this.height * 0.33,   // Control 1 (pulls from base)
+                    flowerX - this.bendOffset, this.baseY - this.height * 0.66,   // Control 2 (pulls toward flower)
+                    flowerX, flowerY                       // Anchor 2 (flower)
+                );
+
+                // --- Draw Flower ---
+                p.noStroke();
+                
+                // NEW: Add blur effect
+                const blurAmount = 8;
+
+                if (this.isHovered) {
+                    // Set shadow properties to create a blur/glow
+                    p.drawingContext.shadowBlur = blurAmount;
+                    p.drawingContext.shadowColor = `rgb(${hoverColor[0]}, ${hoverColor[1]}, ${hoverColor[2]})`;
+                    p.fill(hoverColor);
+                } else {
+                    // Set shadow properties to create a blur/glow
+                    p.drawingContext.shadowBlur = blurAmount;
+                    p.drawingContext.shadowColor = `rgb(${flowerColor[0]}, ${flowerColor[1]}, ${flowerColor[2]})`;
+                    p.fill(flowerColor[0], flowerColor[1], flowerColor[2]);
+                }
+                p.ellipse(flowerX, flowerY, this.flowerSize, this.flowerSize);
+
+                
+                // NEW: Reset shadow blur so it doesn't affect the text tooltip
+                p.drawingContext.shadowBlur = 0;
+
+
+                // --- Draw Tooltip ---
+                if (this.isHovered) {
+                    p.fill(textBg);
+                    p.stroke(textColor);
+                    p.strokeWeight(1);
+                    const textW = p.textWidth(this.project.title) + 10;
+                    p.rect(flowerX + 15, flowerY - 10, textW, 20);
+                    
+                    p.noStroke();
+                    p.fill(textColor);
+                    p.textAlign(p.LEFT, p.CENTER);
+                    p.textSize(12);
+                    p.text(this.project.title, flowerX + 20, flowerY);
+                }
+            }
+        }
+
+        // This runs the p5.js sketch in "instance mode"
+        // It wraps the sketch in a function to protect it from the global scope
+        gardenSketch = new p5((p) => {
+            let plants = [];
+            let canvasContainer;
+            let isDark = false;
+
+            p.setup = () => {
+                canvasContainer = p.select('#garden-canvas-container');
+                const w = canvasContainer.width;
+                const h = canvasContainer.height;
+                const canvas = p.createCanvas(w, h);
+                canvas.parent(canvasContainer); // Attach canvas to the container
+                
+                // Check initial dark mode state
+                isDark = document.documentElement.classList.contains('dark');
+
+                // Create a plant for each project
+                const plantCount = portfolioData.length;
+                for (let i = 0; i < plantCount; i++) {
+                    const project = portfolioData[i];
+                    // Distribute plants across the canvas
+                    const x = p.map(i, 0, plantCount - 1, w * 0.1, w * 0.9); 
+                    // UPDATED: Set base Y to the bottom edge of the canvas
+                    const y = h; 
+                    const plantHeight = p.random(h * 0.3, h * 0.7); // Random height
+                    plants.push(new Plant(p, project, x, y, plantHeight));
+                }
+                
+                p.noLoop(); // Start paused, main render() will turn it on
+            };
+
+            p.draw = () => {
+                // Check dark mode on every frame
+                isDark = document.documentElement.classList.contains('dark');
+                p.background(isDark ? 0 : 255); // Black or White background
+
+                // Update and display all plants
+                for (let plant of plants) {
+                    plant.checkHover(); // Check for mouse first
+                }
+                for (let plant of plants) {
+                    plant.display(isDark); // Then draw (so tooltip is on top)
+                }
+            };
+
+            // Handle clicking
+            p.mouseClicked = () => {
+                // Check if any plant was clicked
+                for (let plant of plants) {
+                    if (plant.click()) {
+                        break; // Stop after the first click
+                    }
+                }
+            };
+
+            // Handle window resizing
+            p.windowResized = () => {
+                const w = canvasContainer.width;
+                const h = canvasContainer.height;
+                p.resizeCanvas(w, h);
+                
+                // Recalculate plant positions on resize
+                const plantCount = plants.length;
+                for (let i = 0; i < plantCount; i++) {
+                    const plant = plants[i];
+                    plant.baseX = p.map(i, 0, plantCount - 1, w * 0.1, w * 0.9);
+                    // UPDATED: Set base Y to the bottom edge
+                    plant.baseY = h;
+                }
+            };
+
+        }); // End of p5.js sketch
+
+    </script>
+</body>
+</html>
+
