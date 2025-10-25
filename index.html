@@ -965,6 +965,20 @@
                 let canvasContainer;
                 let isDark = false;
 
+                // --- THIS IS THE NEW FUNCTION YOU ADDED ---
+                p.preload = () => {
+                    // --- AND THIS IS THE LOOP YOU PASTED ---
+                    for (let project of portfolioData) {
+                        if (project.thumbnail && project.thumbnail.trim() !== "") {
+                            // Make sure you're using a relative path, not a full /Users/ path!
+                            // e.g., "images/windcatchers/windcatchers_1.jpg"
+                            projectImageCache[project.id] = p.loadImage(project.thumbnail);
+                        }
+                    }
+                    
+                };
+                // --- END OF NEW FUNCTION ---
+
                 p.setup = () => {
                     canvasContainer = p.select('#garden-canvas-container');
                     // UPDATED: Use windowWidth/Height for full-screen canvas
@@ -973,14 +987,7 @@
                     const canvas = p.createCanvas(w, h);
                     canvas.parent(canvasContainer); // Attach canvas to the container
                    
-                 for (let project of portfolioData) {
-                        if (project.thumbnail && project.thumbnail.trim() !== "") {
-                            // Make sure you're using a relative path, not a full /Users/ path!
-                            // e.g., "images/windcatchers/windcatchers_1.jpg"
-                            projectImageCache[project.id] = p.loadImage(project.thumbnail);
-                        }
-                    }
-                    
+                 
                     // Check initial dark mode state
                     isDark = document.documentElement.classList.contains('dark');
 
@@ -1003,24 +1010,23 @@
                 };
 
                 // P.DRAW FUNCTION
-            p.draw = () => {
-                // Check dark mode on every frame
-                isDark = document.documentElement.classList.contains('dark');
-                p.background(isDark ? 0 : 255); // Black or White background
+                p.draw = () => {
+                    // Check dark mode on every frame
+                    isDark = document.documentElement.classList.contains('dark');
+                    p.background(isDark ? 0 : 255); // Black or White background
 
-                // --- 1. FIND HOVERED PROJECTS & DRAW PLANTS ---
-                let hoveredProjectsList = []; // Create a temporary list of hovered projects
-                
-                // Update and display all plants
-                for (let plant of plants) {
-                    plant.checkHover(); // Check for mouse first
-                    if (plant.isHovered) {
-                        hoveredProjectsList.push(plant.project);
+                    // --- 1. FIND HOVERED PROJECTS & DRAW PLANTS ---
+                    let hoveredProjectsList = []; // Create a temporary list of hovered projects
+                    
+                    // Update and display all plants
+                    for (let plant of plants) {
+                        plant.checkHover(); // Check for mouse first
+                        if (plant.isHovered) {
+                            hoveredProjectsList.push(plant.project);
+                        }
+                        plant.display(isDark); // Then draw (this still draws the text tooltip)
                     }
-                    plant.display(isDark); // Then draw (this still draws the text tooltip)
-                }
-
-                // THIS REPLACES THE OLD "MANAGE & DRAW" BLOCK IN p.draw()
+                    // THIS REPLACES THE OLD "MANAGE & DRAW" BLOCK IN p.draw()
 
         // --- 2. MANAGE & DRAW IMAGE TOOLTIPS ---
         if (hoveredProjectsList.length > 0) {
@@ -1050,7 +1056,7 @@
                     currentHoverImage = null;
                     hoverImageTimer = 0;
                 }
-            },
+            }
                         
                 
 
