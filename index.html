@@ -25,6 +25,34 @@
         }
     </script>
     <style>
+
+        #loading-screen {
+        opacity: 1; /* Start fully visible */
+        transition: opacity 1000ms ease-in-out; /* Define the fade duration here */
+    }
+         /* NEW: This class will be added by JS to fade out the loader */
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none; /* Lets you click "through" it while it fades */
+        }
+        /* --- ADD THIS FOR THE PULSING ANIMATION --- */
+            @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            }
+
+            #loader-icon {
+            /* This runs the 'pulse' animation over 1.5s, on repeat */
+            animation: pulse 1.5s ease-in-out infinite;
+            }
+            /* --- END OF NEW CSS --- */
+
         /* Simple fade-in transition */
         .content-section {
             display: none;
@@ -92,11 +120,19 @@
         }
         /* ... Removed border styles ... */
 
+       
+
     </style>
 </head>
 <!-- FIXED: Removed h-full -->
 <body class="font-sans antialiased text-gray-900 bg-white dark:bg-black dark:text-gray-200">
     
+    <!-- NEW: LOADING SCREEN -->
+    <div id="loading-screen" class="fixed top-0 left-0 w-full h-full bg-white dark:bg-black flex items-center justify-center z-[9999]">
+        <!-- You can put any loading text or animation here -->
+        <p id="loader-icon" class="text-lg text-gray-500 dark:text-gray-400"> 🪲  </p>
+    </div>
+
     <!-- Main Site Wrapper -->
     <div id="main-wrapper" class="flex flex-col min-h-screen">
         <!-- Header / Navigation -->
@@ -403,6 +439,9 @@
                 tags: ["Work","Visual Thinking"] 
             },
         ];
+        // Sorte Portfolio Data
+        const sortedPortfolioData = [...portfolioData].sort((a, b) => b.year - a.year);
+
         // --- APPLICATION STATE ---
         const state = {
             isSimple: false, // "Boring" view is off by default
@@ -578,7 +617,7 @@
             normalGrid.innerHTML = ''; // Clear existing grid
             
             // Sort by year, newest first
-            const sortedProjects = [...portfolioData].sort((a, b) => b.year - a.year);
+            const sortedProjects = sortedPortfolioData; // Use the pre-sorted array
 
             // NEW: Filter projects based on the current tag
             const filteredProjects = state.currentTag === 'all'
@@ -612,7 +651,7 @@
             simpleProjectList.innerHTML = ''; // Clear list
             
             // Sort by year, newest first (chronological)
-            const sortedProjects = [...portfolioData].sort((a, b) => b.year - a.year);
+            const sortedProjects = sortedPortfolioData; // Use the pre-sorted array
 
             // NEW: Filter projects based on the current tag
             const filteredProjects = state.currentTag === 'all'
@@ -752,6 +791,51 @@
         // Wrap p5 sketch initialization in DOMContentLoaded listener
         document.addEventListener('DOMContentLoaded', () => {
             // This class defines a "Plant" in our garden
+            const imageDisplayDuration = 40; // 2 seconds (at 60fps)
+            const loadingScreen = document.getElementById('loading-screen');
+            
+
+
+            let projectImageCache = {};
+            let currentHoverImage = null; // Holds the single image being shown
+            let hoverImageTimer = 0;      // Timer for switching the image
+
+            
+
+    
+            /**
+             * Draws an image with object-cover behavior
+             */
+
+             // --- MODIFIED LOADING SCREEN LOGIC ---
+                setTimeout(() => {
+                    if (loadingScreen) {
+                        void loadingScreen.offsetWidth; 
+                        loadingScreen.classList.add('hidden');
+                    }
+                }, 700); // <-- CHANGED from 500 to 2000 (2 seconds)
+                
+            function drawCroppedImage(p, img, x, y, w, h) {
+                const imgRatio = img.width / img.height;
+                const targetRatio = w / h; // This will be 1 (50/50)
+
+                let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
+
+                if (imgRatio > targetRatio) {
+                    // Image is wider than target, crop the sides
+                    sWidth = img.height * targetRatio;
+                    sx = (img.width - sWidth) / 2;
+                } else if (imgRatio < targetRatio) {
+                    // Image is taller than target, crop top/bottom
+                    sHeight = img.width / targetRatio;
+                    sy = (img.height - sHeight) / 2;
+                }
+
+                // Use the 9-argument image function to draw the cropped source
+                p.image(img, x, y, w, h, sx, sy, sWidth, sHeight);
+            }
+            // --- END OF NEW HELPER FUNCTION ---
+            
             class Plant {
                 constructor(p, project, x, y, h) {
                     this.p = p; // The p5.js instance
@@ -888,6 +972,14 @@
                     const h = p.windowHeight;
                     const canvas = p.createCanvas(w, h);
                     canvas.parent(canvasContainer); // Attach canvas to the container
+                   
+                 for (let project of portfolioData) {
+                        if (project.thumbnail && project.thumbnail.trim() !== "") {
+                            // Make sure you're using a relative path, not a full /Users/ path!
+                            // e.g., "images/windcatchers/windcatchers_1.jpg"
+                            projectImageCache[project.id] = p.loadImage(project.thumbnail);
+                        }
+                    }
                     
                     // Check initial dark mode state
                     isDark = document.documentElement.classList.contains('dark');
@@ -907,21 +999,60 @@
                     p.noLoop(); // Start paused, main render() will turn it on
                      // Call render initially in case the garden is the first page shown
                     render();
+                
                 };
 
-                p.draw = () => {
-                    // Check dark mode on every frame
-                    isDark = document.documentElement.classList.contains('dark');
-                    p.background(isDark ? 0 : 255); // Black or White background
+                // P.DRAW FUNCTION
+            p.draw = () => {
+                // Check dark mode on every frame
+                isDark = document.documentElement.classList.contains('dark');
+                p.background(isDark ? 0 : 255); // Black or White background
 
-                    // Update and display all plants
-                    for (let plant of plants) {
-                        plant.checkHover(); // Check for mouse first
+                // --- 1. FIND HOVERED PROJECTS & DRAW PLANTS ---
+                let hoveredProjectsList = []; // Create a temporary list of hovered projects
+                
+                // Update and display all plants
+                for (let plant of plants) {
+                    plant.checkHover(); // Check for mouse first
+                    if (plant.isHovered) {
+                        hoveredProjectsList.push(plant.project);
                     }
-                    for (let plant of plants) {
-                        plant.display(isDark); // Then draw (so tooltip is on top)
-                    }
-                };
+                    plant.display(isDark); // Then draw (this still draws the text tooltip)
+                }
+
+                // THIS REPLACES THE OLD "MANAGE & DRAW" BLOCK IN p.draw()
+
+        // --- 2. MANAGE & DRAW IMAGE TOOLTIPS ---
+        if (hoveredProjectsList.length > 0) {
+            hoverImageTimer++; // Increment timer
+
+            // If timer is up, or if we just started hovering (no image), get a new one
+            if (hoverImageTimer > imageDisplayDuration || !currentHoverImage) {
+                hoverImageTimer = 0; // Reset timer
+
+                // Pick a random project from the ones currently hovered
+                const randomProject = hoveredProjectsList[Math.floor(Math.random() * hoveredProjectsList.length)];
+
+                if (randomProject && projectImageCache[randomProject.id]) {
+                    currentHoverImage = projectImageCache[randomProject.id];
+                }
+            }
+
+            // Draw the single current image (if it's loaded)
+            const imgSize = 50;
+            p.noStroke(); 
+            if (currentHoverImage && currentHoverImage.width > 0) {
+                drawCroppedImage(p, currentHoverImage, p.mouseX + 0, p.mouseY + -50, imgSize, imgSize);
+            }
+
+                } else {
+                    // Not hovering anything, clear the image
+                    currentHoverImage = null;
+                    hoverImageTimer = 0;
+                }
+            },
+                        
+                
 
                 // Handle clicking
                 p.mouseClicked = () => {
