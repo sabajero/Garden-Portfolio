@@ -195,14 +195,14 @@
                 
                 <div class="flex flex-col md:flex-row gap-8">
                     <!-- Left Column: Project List -->
-                    <!-- FIXED: Corrected invalid Tailwind class lg:w-1.5/4 to lg:w-1/3 -->
+
                     <div class="w-full md:w-1/3 lg:w-1/3">
                         <ul id="simple-project-list" class="space-y-3">
                             <!-- JS will populate this -->
                         </ul>
                     </div>
-                    <!-- Right Column: Project Details -->
-                    <div id="simple-project-image-container" class="w-full md:w-2/3 lg:w-3/4 sticky top-24 self-start">
+                    <!-- Right Column: Project PICTURES -->
+                    <div id="simple-project-image-container" class="w-full md:w-2/3 lg:w-3/4 sticky top-24 self-start h-[calc(100vh-6rem)]">
                         <!-- JS will populate this -->
                     </div>
                 </div>
@@ -214,18 +214,30 @@
         <!-- FIXED: Added bg-white dark:bg-black to ensure footer has a background in both modes -->
         <!-- UPDATED: Footer should also be on top of the garden page -->
         <footer class="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 mt-16 relative z-5">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                &copy; <span id="current-year"></span> Jerónimo. © Jerónimo Gutiérrez Balanta. All rights reserved. Unauthorized use of content is prohibited. If you want to use, share something or have questions just send me an email :) 
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-left text-sm text-gray-500 dark:text-gray-400">
+                &copy; <span id="current-year"></span> Jerónimo Gutiérrez Balanta. All rights reserved. If you want to use, share something or have questions just send me an email :) 
             </div>
         </footer>
     </div>
 
-    <!-- DATA DATA DATA -->
+    <!-- DATA DATA DAT
+     Jerarquía:
+        Design
+            Research
+                Personal
+                    Work
+                        On-going
+        #Drawing
+            #Publication
+                #Digital
+                    #Sound
+                        #Performance
+                             -->
     <script>
         const portfolioData = [
             // Your existing projects
-            { id: 1, title: "Windcatchers", year: 2025, type: "Research", description: "A project about machines, displays and wind.", thumbnail: "images/thumbnails/windcatcher.png", tags: ["Research", "Electronics"] },
-            { id: 2, title: "Corp Bully", year: 2025, type: "Video Game", description: "Part of my outsourcing research.", thumbnail: "images/thumbnails/bully.png", tags: ["Personal", "Design"] },
+            { id: 1, title: "Windcatchers", year: 2025, type: "Research", description: "A project about machines, displays and wind.", thumbnail: "images/thumbnails/windcatchers_1.jpg", tags: ["Design"] },
+            { id: 2, title: "Corp Bully", year: 2025, type: "Video Game", description: "Part of my outsourcing research.", thumbnail: "images/thumbnails/corp.png", tags: ["Design"] },
             { id: 3, title: "How to shit on your company", year: 2024, type: "User Manual", description: "Client photoshoot.", thumbnail: "images/thumbnails/shit.jpg", tags: ["Design"] },
             { 
                 id: 4.2, 
@@ -233,29 +245,27 @@
                 year: 2025, 
                 type: "Zine", 
                 description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
-                thumbnail: "images/thumbnails/chordata.jpg", // <-- ADDED 'thumbnail' KEY
-                tags: ["Publication", "Comic"] // <-- ADDED 'tags' KEY
+                thumbnail: "images/thumbnails/chordata.jpg", 
+                tags: ["Design","Publication",] 
             },
             { 
                 id: 4, 
                 title: "Aura Coffee Company", 
                 year: 2025, 
-                type: "Sound Essay", // <-- ADDED 'type' KEY
+                type: "Sound Essay", // 
                 description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
-                thumbnail: "images/thumbnails/aura.jpg", // <-- ADDED 'thumbnail' KEY
-                tags: ["Sound", "Essay", "Artistic Research"] // <-- ADDED 'tags' KEY
+                thumbnail: "images/thumbnails/aura.jpg", 
+                tags: ["Sound", "Essay", "Research"] 
             },
             { 
                 id: 4.5, 
                 title: "Internship: GICAEA", 
                 year: 2021, 
-                type: "Education", // <-- ADDED 'type' KEY
+                type: "Education", // 
                 description: "The following audio essay is an exploration and reflection on the life of my great aunt Aura, who worked in the Merino coffee factory in the 60s. Starting from her oral tradition and stories around coffee, I carry out an essay that crosses approaches from sound philosophy to talk about silencing, the defiance of family narratives, and sound in my artistic practice as another way of making memory. ", 
-                thumbnail: "images/thumbnails/gicaea.jpg", // <-- ADDED 'thumbnail' KEY
-                tags: ["Education", "Printmaking", "Artistic Research"] // <-- ADDED 'tags' KEY
+                thumbnail: "images/thumbnails/gicaea.jpg", 
+                tags: ["Education", "Printmaking", "Research"] 
             },
-
-            // --- Your 8 new projects start here ---
             {
                 id: 5,
                 title: "Pandémica",
@@ -263,7 +273,7 @@
                 type: "Research-Creation",
                 description: "This Meritorious Degree Work, conducted at Universidad del Valle, comprises a monograph and artistic creation grounded in research-creation methodology, aimed at reflecting on the changes brought by the Covid-19 pandemic to daily life in Cali and Buga through a virtual art book.",
                 thumbnail: "images/thumbnails/pandemica.jpeg",
-                tags: ["Research","Drawing"] // Left empty as requested
+                tags: ["Research","Drawing"] 
             },
             {
                 id: 6,
@@ -272,7 +282,7 @@
                 type: "Comic",
                 description: "Design, conceptualization and illustration for this short comic that emerged from the research project \"Characterization of the health status of Women in Buenaventura and Guapi,\" supported by the Ministry of Science and Technology and executed by the \"Observatorio para la Equidad de las Mujeres (OEM)\" between 2021 and 2022.",
                 thumbnail: "images/thumbnails/comadre.png",
-                tags: ["Comic","Work"] // Left empty as requested
+                tags: ["Comic","Work"] 
             },
             {
                 id: 6.1,
@@ -281,7 +291,7 @@
                 type: "Painting",
                 description: "Now without an open sky is a project that seeks to illustrate the feelings, thoughts and experiences of 10 young university students in the confinement caused by the Covid 19 pandemic in Cali. Each illustration was made from the dialogue with the participants and what they considered significant to be illustrated. The result of this exercise are ten watercolors that speak of the city and the experience of confinement from an intimate point of view.",
                 thumbnail: "images/thumbnails/cielo.jpg",
-                tags: ["Thesis","Painting","Artistic Research"] // Left empty as requested
+                tags: ["Research"] 
             },
             {
                 id: 7,
@@ -290,7 +300,7 @@
                 type: "Muralism",
                 description: "\"Permanent Night Owls\" project originated as a response to the Covid-19 lockdown, initially conceived as a home muralism proposal.",
                 thumbnail: "images/thumbnails/bichos.jpeg",
-                tags: [] // Left empty as requested
+                tags: ["Drawing",] 
             },
             {
                 id: 8,
@@ -299,7 +309,7 @@
                 type: "Artistic/Educational Project",
                 description: "Aleteo Shakuhachi Project was an artistic / educational project conceived along two friends of mine, our objective was to teach, build and explore the possibilities of the Japanese flute \"Shakuhachi\" outside the musical or meditation context.",
                 thumbnail: "images/thumbnails/shaku.jpg",
-                tags: [] // Left empty as requested
+                tags: ["Education","Design"] 
             },
             {
                 id: 9,
@@ -308,7 +318,7 @@
                 type: "Performance",
                 description: "Performance action took place during the 2019 Manizales International Contemporary Art Festival (FIAC), organized by the University of Caldas. It involved walking very slowly for an hour along one of the city's busiest streets while playing the Japanese Shakuhachi flute. This action challenged the city's dynamics and conventional notions of street usage.",
                 thumbnail: "images/thumbnails/interlude.jpg",
-                tags: ["Performance",] // Left empty as requested
+                tags: ["Performance",] 
             },
             {
                 id: 10,
@@ -317,7 +327,7 @@
                 type: "Imagery",
                 description: "\"The Strongest Bull\" is a project that from my personal experience of familial disappearance to explore collective narratives of disappearance phenomena in Colombia in the 80's, utilizing imagery as a tool for spectator reflection.",
                 thumbnail: "images/thumbnails/toro.jpeg",
-                tags: ["Animation"] // Left empty as requested
+                tags: ["Research","Animation"] 
             },
             {
                 id: 11,
@@ -325,8 +335,8 @@
                 year: 2019,
                 type: "Illustration",
                 description: "Open call to artists to participate collectively in the creation of illustrations for the book \"Escondidijo\", I was involded as one of the many artist that illustrated for this book.",
-                thumbnail: "",
-                tags: [] // Left empty as requested
+                thumbnail: "images/thumbnails/letras.jpg",
+                tags: ["Illustration"] 
             },
             {
                 id: 12,
@@ -334,13 +344,65 @@
                 year: 2017,
                 type: "Sound Recording",
                 description: "\"False Landscape\" was a project undertaken in 2017, based on recordings captured in Cali, Colombia",
-                thumbnail: "",
-                tags: [] // Left empty as requested
-            }
+                thumbnail: "images/thumbnails/falso.jpg",
+                tags: ["Sound"] 
+            },
+                            //DESIGN
+            {
+                id: 13,
+                title: "Capricci Club: Candela & Quimera",
+                year: 2020,
+                type: "Graphic Design",
+                description: "Capricci Club is a colombian feminist brand that offers hair care products, with them I had the opportunity to create some of the design of labels for hair care products, design of packaging boxes and branding (Logos, color palettes, visual identity).",
+                thumbnail: "images/thumbnails/candela.jpg",
+                tags: ["Work"] 
+            },
+            {
+                id: 14,
+                title: "Capricci Club: Frida & Kahlo",
+                year: 2022,
+                type: "Graphic Design",
+                description: "Capricci Club is a colombian feminist brand that offers hair care products, with them I had the opportunity to create some of the design of labels for hair care products, design of packaging boxes and branding (Logos, color palettes, visual identity).",
+                thumbnail: "images/thumbnails/capricci.jpg",
+                tags: ["Work"] 
+            },
+            {
+                id: 15,
+                title: "Visual Thinking Webinars: Javeriana",
+                year: 2020,
+                type: "Graphic Design",
+                description: "Visual Thinking was for more than a year my job, translating complex information to fun memorable drawings in real time ;)",
+                thumbnail: "images/thumbnails/visual1.png",
+                tags: ["Work","Visual Thinking"] 
+            },
+            {
+                id: 16,
+                title: "Visual Thinking: OEM-Oxfam",
+                year: 2022,
+                type: "Graphic Design",
+                description: "Live visual thinking for private event",
+                thumbnail: "images/thumbnails/oxfam.png",
+                tags: ["Work","Visual Thinking"] 
+            },
+            {
+                id: 17,
+                title: "Didactic Graphic Material - AMUCC",
+                year: 2021,
+                type: "Graphic Design",
+                description: "Graphic and didactic material for the project Factors that influence the empowerment of women coffee growers in Cauca associated with AMUCC, Javeriana Cali University, WWB Colombia Foundation, Tecnicafé, AMUCC.",
+                thumbnail: "images/thumbnails/amucc.png",
+                tags: ["Work"] 
+            },
+            {
+                id: 18,
+                title: "CVC, Univalle: Visual Thinking ",
+                year: 2021,
+                type: "Graphic Design",
+                description: "Visual Reporting or Visual Thinking of 2 workshops from the Environmental Passives project in the communities of Triana and Zacarías, in the Colombian Pacific,ana Cali University, WWB Colombia Foundation, Tecnicafé, AMUCC.",
+                thumbnail: "images/thumbnails/zacarias.jpg",
+                tags: ["Work","Visual Thinking"] 
+            },
         ];
-
-        // --- REMOVED: TRANSLATIONS ---
-
         // --- APPLICATION STATE ---
         const state = {
             isSimple: false, // "Boring" view is off by default
@@ -714,7 +776,7 @@
                     // Calculate distance from mouse to flower
                     const d = this.p.dist(this.p.mouseX, this.p.mouseY, flowerX, flowerY);
                     // UPDATED: Increased hover radius
-                    this.isHovered = (d < 30); // Was (d < 80) in your code, but flowerSize is 20. Let's try 30.
+                    this.isHovered = (d < 150); // Was (d < 80) in your code, but flowerSize is 20. Let's try 30.
                 }
 
                 // Handle the click event
@@ -757,6 +819,19 @@
                         flowerX - this.bendOffset, this.baseY - this.height * 0.66,   // Control 2 (pulls toward flower)
                         flowerX, flowerY                       // Anchor 2 (flower)
                     );
+
+                    // --- NEW: Draw line from pointer to flower if hovered ---
+                    if (this.isHovered) {
+                        // Set the line color to semi-transparent green
+                        // (uses the 'hoverColor' variable already defined in this function)
+                        const lineAlpha = 100; // 0 (transparent) to 255 (opaque)
+                        p.stroke(hoverColor[0], hoverColor[1], hoverColor[2], lineAlpha);
+                        p.strokeWeight(3); // Make the line thin
+
+                        // Draw the line from the mouse (p.mouseX, p.mouseY) 
+                        // to the flower's current position (flowerX, flowerY)
+                        p.line(p.mouseX, p.mouseY, flowerX, flowerY);
+                    }
 
                     // --- Draw Flower ---
                     p.noStroke();
