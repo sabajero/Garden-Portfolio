@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> 🪲 Jerónimo Gutiérrez Balanta </title>
+    <link rel="icon" type="image/png" href="images/beetle.png">
+    <title>Jerónimo Gutiérrez Balanta</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- NEW: Load p5.js for the Garden -->
@@ -28,7 +29,7 @@
 
         #loading-screen {
         opacity: 1; /* Start fully visible */
-        transition: opacity 1000ms ease-in-out; /* Define the fade duration here */
+        transition: opacity 500ms ease-in-out; /* Define the fade duration here */
     }
         /* NEW: This class will be added by JS to fade out the loader */
         #loading-screen.hidden {
@@ -101,7 +102,7 @@
             border-radius: 50%;
         }
         input:checked + .toggle-slider {
-            background-color: #00FF7F; /* Spring Green */
+            background-color: #c388ff; /* Spring Green */
         }
         input:checked + .toggle-slider:before {
             transform: translateX(18px);
@@ -130,7 +131,7 @@
     <!-- NEW: LOADING SCREEN -->
     <div id="loading-screen" class="fixed top-0 left-0 w-full h-full bg-white dark:bg-black flex items-center justify-center z-[9999]">
         <!-- You can put any loading text or animation here -->
-        <p id="loader-icon" class="text-lg text-gray-500 dark:text-gray-400"> 🪲  </p>
+        <img id="loader-icon" src="images/beetle.png" alt="Loading" class="w-10 h-10">
     </div>
 
     <!-- Main Site Wrapper -->
@@ -139,8 +140,9 @@
         <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-10 dark:bg-black/95">
             <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
                 <!-- Your Name (now a button, styles matched) -->
-                <button id="name-btn" class="text-lg font-medium">
-                    🪲 Jerónimo Gutiérrez Balanta
+                <button id="name-btn" class="text-lg font-medium flex items-center">
+                 <img src="images/beetle.png" alt="Beetle Icon" class="w-4 h-4 mr-2"> <!-- Tweak w-6 h-6 (size) and mr-2 (spacing) as needed -->
+                    Jerónimo Gutiérrez Balanta
                 </button>
                 
                 <!-- Navigation Buttons -->
@@ -151,7 +153,7 @@
                         <!-- RENAMED: Home to Garden -->
                         <button id="garden-btn" class="text-lg font-medium px-4 py-1.5 rounded-full">Garden</button>
                         <button id="works-btn" class="text-lg font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">Works</button>
-                        <button id="about-btn" class="text-lg font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">About</button>
+                        <button id="about-btn" class="text-lg font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">About me</button>
                     </div>
 
                     <!-- REMOVED: View Toggle Button -->
@@ -227,24 +229,23 @@
             <!-- "About" Page View -->
             <section id="about-page" class="content-section">
                 <div class="max-w-3xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-6"> 🪲 </h2>
+                    <img src="images/thumbnails/jero.png" class="space-">
                     <div class="space-y-4 text-lg text-gray-700 dark:text-gray-300">
                 
                         <p>I am a young visual artist that lives and works in Bremen, Germany. I've focused my work towards topics such as the relationships between body and city, family archives, disappearance  and illness, expressing these ideas through traditional techniques like painting, drawing and performance as well as digital and other medium techniques like animation, soundscape, and research-creation. The body in dispute, as a political and poetic issue, is the central axis of my work. Due to the nature of my bachelor degree, I also have a strong background in pedagogy, aesthetics and art history.</p>
                         <p>As a graphic designer, I have specialized in illustration, visual thinking, and product design, working closely with various companies, universities, and regional institutions in interdisciplinary teams and projects. These projects encompass topics such as university continuing education, non-profit training programs with vulnerable communities, and government projects for women's equality and welfare.
 
                             In my free time, as a personal note, I am an amateur musician. I studied three years of music in high school with an emphasis on piano, and I greatly enjoy trail running.
-                        <p> Education
-                        2024 - Now Digital Media Master, HfK Bremen, Germany
-                        2016-2022 Bachelor in Visual Arts, Universidad del Valle, Cali, Colombia
-                        2014-2016 Technical School Certificate, Electronics, SENA 
-                        ​2011-2013 Musical Juvenile Studies, “Plan Pentagrama”, Universidad del Valle
-                        <p>
+                        <h4> Education <h4>
+                       <p>2024 - Now Digital Media Master, HfK Bremen, Germany<p> 
+                        <p>2016-2022 Bachelor in Visual Arts, Universidad del Valle, Cali, Colombia<p>
+                        <p>2014-2016 Technical School Certificate, Electronics, SENA<p>
+                        ​<p>2011-2013 Musical Juvenile Studies, “Plan Pentagrama”, Universidad del Valle</p>
 
-                        <p>​Contact me :)
-                        jeguba1999@gmail.com
-                        (+57) 3004085202 - (+49)1630819959
-                        Ig: @sabajero.<p>
+                        <p>​Contact me :)<p>
+                        <p>jeguba1999@gmail.com<p>
+                        <p>(+57) 3004085202 - (+49)1630819959 <p>
+                        <p>Ig: @sabajero<p>
                     </div>
                 </div>
             </section>
@@ -861,10 +862,10 @@
                         state.currentView = 'normal-portfolio'; // Go to "Works" page
                         state.worksView = 'list';               // Set view to "List"
                         state.selectedSimpleProject = this.project.id; // Select this project
+                        state.currentTag = 'all'; // <--- ADD THIS LINE
                         render(); // Tell the main page to update
                         return true;
                     }
-                    return false;
                 }
 
                 // Draw the plant
